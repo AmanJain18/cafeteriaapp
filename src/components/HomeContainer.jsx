@@ -14,17 +14,17 @@ const HomeContainer = () => {
           <p className="text-base text-orange-500 font-semibold">
             Bike Delivery
           </p>
-          <div className="w-8 h-8 bg-white rounded-full overflow-hidden drop-shadow-xl">
+          <div className ="w-8 h-8 bg-white rounded-full overflow-hidden drop-shadow-xl">
             <img
               src={Delivery}
               className="w-full h-full object-contain"
-              alt="delivery"
+              alt="delivery" 
             />
           </div>
         </div> */}
 
         <p className="text-[2.5rem] lg:text-[4.5rem] font-bold tracking-wide text-headingColor">
-          Fresh & Authentic Foods in&nbsp;
+          Fresh & Authentic Foods in{" "}
           <span className="text-orange-600 text-[3rem] lg:text-[5rem]">
             Campus
           </span>
