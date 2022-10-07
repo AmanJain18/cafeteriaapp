@@ -20,7 +20,7 @@ export const heroData = [
   },
   {
     id: 3,
-    name: "Rolls",
+    name: "Frankie",
     decp: "Panner Roll",
     price: "60",
     imageSrc: R1,

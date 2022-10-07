@@ -155,11 +155,10 @@ const CreateContainer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${
-              alertStatus === "danger"
-                ? "bg-red-400 text-red-800"
-                : "bg-emerald-400 text-emerald-800"
-            }`}
+            className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${alertStatus === "danger"
+              ? "bg-red-400 text-red-800"
+              : "bg-emerald-400 text-emerald-800"
+              }`}
           >
             {msg}
           </motion.p>
@@ -231,7 +230,7 @@ const CreateContainer = () => {
                     />
                     <button
                       type="button"
-                      className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md  duration-500 transition-all ease-in-out"
+                      className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out"
                       onClick={deleteImage}
                     >
                       <MdDelete className="text-white" />
