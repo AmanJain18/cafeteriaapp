@@ -27,9 +27,9 @@ const Cart = () => {
 const Fooditems = fetchCart() 
 	const [count, setcount] = React.useState(0) 
 	
-	if (Fooditems.length === 0) {
-				  
-			 return <h1 class="text-xl font-medium ">Shopping Cart</h1>
+  		  if(Fooditems.length===0){
+			
+			 return <h1>Your Cart Is Empty!!</h1>
 	  
 			
 	}
