@@ -20,265 +20,216 @@ import { storage } from "../firebase.config";
 import { getAllFoodItems, saveItem } from "../utils/firebaseFunctions";
 import { actionType } from "../context/reducer";
 import { useStateValue } from "../context/StateProvider";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const [title, setTitle] = useState("");
-  const [calories, setCalories] = useState("");
-  const [price, setPrice] = useState("");
-  const [category, setCategory] = useState(null);
-  const [imageAsset, setImageAsset] = useState(null);
-  const [fields, setFields] = useState(false);
-  const [alertStatus, setAlertStatus] = useState("danger");
-  const [msg, setMsg] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [{ foodItems }, dispatch] = useStateValue();
-
-  const uploadImage = (e) => {
-    setIsLoading(true);
-    const imageFile = e.target.files[0];
-    const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const uploadProgress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      },
-      (error) => {
-        console.log(error);
-        setFields(true);
-        setMsg("Error while uploading : Try AGain 🙇");
-        setAlertStatus("danger");
-        setTimeout(() => {
-          setFields(false);
-          setIsLoading(false);
-        }, 4000);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageAsset(downloadURL);
-          setIsLoading(false);
-          setFields(true);
-          setMsg("Image uploaded successfully 😊");
-          setAlertStatus("success");
-          setTimeout(() => {
-            setFields(false);
-          }, 4000);
-        });
-      }
-    );
-  };
-
-  const deleteImage = () => {
-    setIsLoading(true);
-    const deleteRef = ref(storage, imageAsset);
-    deleteObject(deleteRef).then(() => {
-      setImageAsset(null);
-      setIsLoading(false);
-      setFields(true);
-      setMsg("Image deleted successfully 😊");
-      setAlertStatus("success");
-      setTimeout(() => {
-        setFields(false);
-      }, 4000);
-    });
-  };
-
-  const saveDetails = () => {
-    setIsLoading(true);
-    try {
-      if (!title || !calories || !imageAsset || !price || !category) {
-        setFields(true);
-        setMsg("Required fields can't be empty");
-        setAlertStatus("danger");
-        setTimeout(() => {
-          setFields(false);
-          setIsLoading(false);
-        }, 4000);
-      } else {
-        const data = {
-          id: `${Date.now()}`,
-          title: title,
-          imageURL: imageAsset,
-          category: category,
-          calories: calories,
-          qty: 1,
-          price: price,
-        };
-        saveItem(data);
-        setIsLoading(false);
-        setFields(true);
-        setMsg("Data Uploaded successfully 😊");
-        setAlertStatus("success");
-        setTimeout(() => {
-          setFields(false);
-        }, 4000);
-        clearData();
-      }
-    } catch (error) {
-      console.log(error);
-      setFields(true);
-      setMsg("Error while uploading : Try AGain 🙇");
-      setAlertStatus("danger");
-      setTimeout(() => {
-        setFields(false);
-        setIsLoading(false);
-      }, 4000);
-    }
-
-    fetchData();
-  };
-
-  const clearData = () => {
-    setTitle("");
-    setImageAsset(null);
-    setCalories("");
-    setPrice("");
-    setCategory("Select Category");
-  };
-
-  const fetchData = async () => {
-    await getAllFoodItems().then((data) => {
-      dispatch({
-        type: actionType.SET_FOOD_ITEMS,
-        foodItems: data,
-      });
-    });
-  };
-
+const Fooditems = [{name:"Masala Dosa",price:60,count:2},{name:"Pav Bhaji",price:100,count:2},{name:"Sev Puri",price:45,count:2},{name:"Coke",price:20,count:4}] 
+  const [count,setcount] = React.useState(0) 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
-      <div className="w-[90%] md:w-[50%] border border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center gap-4">
-        {fields && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${alertStatus === "danger"
-              ? "bg-red-400 text-red-800"
-              : "bg-emerald-400 text-emerald-800"
-              }`}
-          >
-            {msg}
-          </motion.p>
-        )}
+    <>
 
-        <div className="w-full py-2 border-b border-gray-300 flex items-center gap-2">
-          <MdFastfood className="text-xl text-gray-700" />
-          <input
-            type="text"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Give me a title..."
-            className="w-full h-full text-lg bg-transparent outline-none border-none placeholder:text-gray-400 text-textColor"
-          />
+<div class="h-screen bg-gray-300">
+	<div class="py-12">
+		
+	
+    <div class="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg  md:max-w-5xl">
+        <div class="md:flex ">
+            <div class="w-full p-4 px-5 py-5">
+
+            	<div class="md:grid md:grid-cols-3 gap-2 ">
+
+            		<div class="col-span-2 p-5">
+
+            			<h1 class="text-xl font-medium ">Shopping Cart</h1>
+                    {Fooditems.map((data) => {
+                      return (
+
+                        <div class="flex justify-between items-center mt-6 pt-6">
+            				<div class="flex  items-center">
+            					<img src="https://i.imgur.com/EEguU02.jpg" width="60" class="rounded-full "/>
+
+            					<div class="flex flex-col ml-3">
+                              <span class="md:text-md font-medium">{data.name}</span>
+            						<span class="text-xs font-light text-gray-400">#41551</span>
+            						
+            					</div>
+
+            					
+            				</div>
+
+            				<div class="flex justify-center items-center">
+            					
+            					<div class="pr-8 flex ">
+                              <button onClick={() => {setcount(count-1) }}>
+                                <span class="font-semibold">-</span>
+                        </button>
+                              <input type="text" class="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value={count} />
+            						<button onClick={() => {setcount(count+1) }}>
+                                <span class="font-semibold">+</span>
+                        </button>
+            					</div>
+
+            					<div class="pr-8 ">
+            						
+                              <span class="text-xs font-medium">{data.price}₹</span>
+            					</div>
+            					<div>
+            						<i class="fa fa-close text-xs font-medium"></i>
+            					</div>
+
+            				</div>
+            				
+            			</div>
+                      
+                    )})}
+            			
+
+
+
+            			<div class="flex justify-between items-center mt-6 pt-6 border-t"> 
+                      <Link to="/home">
+                        <div class="flex items-center">
+            					<i class="fa fa-arrow-left text-sm pr-2"></i>
+            					<span class="text-md  font-medium text-blue-500">Continue Shopping</span>
+            				</div>
+                    </Link>
+
+            				<div class="flex justify-center items-end">
+            					<span class="text-sm font-medium text-gray-400 mr-1">Subtotal:</span>
+            					<span class="text-lg font-bold text-gray-800 ">300₹</span>
+            					
+            				</div>
+            				
+            			</div>
+
+
+
+
+
+
+
+
+            			
+            		</div>
+            		<div class=" p-5 bg-gray-800 rounded overflow-visible">
+
+            			<span class="text-xl font-medium text-gray-100 block pb-3">Card Details</span>
+
+            			<span class="text-xs text-gray-400 ">Card Type</span>
+
+            			<div class="overflow-visible flex justify-between items-center mt-2">
+
+            			
+
+
+            				<div class="rounded w-52 h-28 bg-gray-500 py-2 px-4 relative right-10">
+
+            					<span class="italic text-lg font-medium text-gray-200 underline">VISA</span>
+
+            					<div class="flex justify-between items-center pt-4 ">
+            						
+            						<span class="text-xs text-gray-200 font-medium">****</span>
+            						<span class="text-xs text-gray-200 font-medium">****</span>
+            						<span class="text-xs text-gray-200 font-medium">****</span>
+            						<span class="text-xs text-gray-200 font-medium">****</span>
+
+            					</div>
+
+            					<div class="flex justify-between items-center mt-3">
+             						
+            						<span class="text-xs  text-gray-200">Giga Tamarashvili</span>
+            						<span class="text-xs  text-gray-200">12/18</span>
+            					</div>
+
+
+            					
+            				</div>
+
+
+
+
+
+
+            				<div class="flex justify-center  items-center flex-col">
+
+            					<img src="https://img.icons8.com/color/96/000000/mastercard-logo.png" width="40" class="relative right-5" />
+            					<span class="text-xs font-medium text-gray-200 bottom-2 relative right-5">mastercard.</span>
+            					
+            				</div>
+            				
+            			</div>
+
+
+
+
+            			<div class="flex justify-center flex-col pt-3">
+            				<label class="text-xs text-gray-400 ">Name on Card</label>
+            				<input type="text" class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="Giga Tamarashvili"/>
+            			</div>
+
+
+            			<div class="flex justify-center flex-col pt-3">
+            				<label class="text-xs text-gray-400 ">Card Number</label>
+            				<input type="text" class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="****     ****      ****      ****"/>
+            			</div>
+
+
+
+
+            			<div class="grid grid-cols-3 gap-2 pt-2 mb-3">
+
+            				<div class="col-span-2 ">
+
+            					<label class="text-xs text-gray-400">Expiration Date</label>
+            					<div class="grid grid-cols-2 gap-2">
+
+            						<input type="text" class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="mm"/>
+            						<input type="text" class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="yyyy"/>
+            						
+            					</div>
+
+
+            					
+            				</div>
+
+            				<div class="">
+            					<label class="text-xs text-gray-400">CVV</label>
+            					<input type="text" class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="XXX"/>
+            					
+            				</div>
+            				
+            			</div>
+
+
+
+
+
+            			<button class="h-12 w-full bg-blue-500 rounded focus:outline-none text-white hover:bg-blue-600">Check Out</button>
+
+
+
+
+
+
+
+
+
+            			
+            		</div>
+
+            		
+            	</div>
+            	
+               
+           </div>
         </div>
-
-        <div className="w-full">
-          <select
-            onChange={(e) => setCategory(e.target.value)}
-            className="outline-none w-full text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
-          >
-            <option value="other" className="bg-white">
-              Select Category
-            </option>
-            {categories &&
-              categories.map((item) => (
-                <option
-                  key={item.id}
-                  className="text-base border-0 outline-none capitalize bg-white text-headingColor"
-                  value={item.urlParamName}
-                >
-                  {item.name}
-                </option>
-              ))}
-          </select>
-        </div>
-
-        <div className="group flex justify-center items-center flex-col border-2 border-dotted border-gray-300 w-full h-225 md:h-340 cursor-pointer rounded-lg">
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <>
-              {!imageAsset ? (
-                <>
-                  <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                      <MdCloudUpload className="text-gray-500 text-3xl hover:text-gray-700" />
-                      <p className="text-gray-500 hover:text-gray-700">
-                        Click here to upload
-                      </p>
-                    </div>
-                    <input
-                      type="file"
-                      name="uploadimage"
-                      accept="image/*"
-                      onChange={uploadImage}
-                      className="w-0 h-0"
-                    />
-                  </label>
-                </>
-              ) : (
-                <>
-                  <div className="relative h-full">
-                    <img
-                      src={imageAsset}
-                      alt="uploaded image"
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out"
-                      onClick={deleteImage}
-                    >
-                      <MdDelete className="text-white" />
-                    </button>
-                  </div>
-                </>
-              )}
-            </>
-          )}
-        </div>
-
-        <div className="w-full flex flex-col md:flex-row items-center gap-3">
-          <div className="w-full py-2 border-b border-gray-300 flex items-center gap-2">
-            <MdFoodBank className="text-gray-700 text-2xl" />
-            <input
-              type="text"
-              required
-              value={calories}
-              onChange={(e) => setCalories(e.target.value)}
-              placeholder="Calories"
-              className="w-full h-full text-lg bg-transparent outline-none border-none placeholder:text-gray-400 text-textColor"
-            />
-          </div>
-
-          <div className="w-full py-2 border-b border-gray-300 flex items-center gap-2">
-            <MdAttachMoney className="text-gray-700 text-2xl" />
-            <input
-              type="text"
-              required
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="Price"
-              className="w-full h-full text-lg bg-transparent outline-none border-none placeholder:text-gray-400 text-textColor"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center w-full">
-          <button
-            type="button"
-            className="ml-0 md:ml-auto w-full md:w-auto border-none outline-none bg-emerald-500 px-12 py-2 rounded-lg text-lg text-white font-semibold"
-            onClick={saveDetails}
-          >
-            Save
-          </button>
-        </div>
-      </div>
     </div>
+    </div>
+</div>      
+
+
+    </>
+    
   );
 };
 
