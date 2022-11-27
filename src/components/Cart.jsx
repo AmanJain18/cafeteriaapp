@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { fetchCart } from "../utils/fetchLocalStorageData";
 
 import {
   MdFastfood,
@@ -23,9 +24,17 @@ import { useStateValue } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-const Fooditems = [{name:"Masala Dosa",price:60,count:2},{name:"Pav Bhaji",price:100,count:2},{name:"Sev Puri",price:45,count:2},{name:"Coke",price:20,count:4}] 
-  const [count,setcount] = React.useState(0) 
-  return (
+const Fooditems = fetchCart() 
+	const [count, setcount] = React.useState(0) 
+	
+	if (Fooditems.length === 0) {
+				  
+			 return <h1 class="text-xl font-medium ">Shopping Cart</h1>
+	  
+			
+	}
+	
+	return (
     <>
 
 <div class="h-screen bg-gray-300">
