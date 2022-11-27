@@ -73,10 +73,11 @@ const Header = () => {
                         <motion.li whileTap={{ scale: 1.2 }} className='text-bas text-textColor hover:text-blue-700  duration-100 cursor-pointer transition-all ease-in-out'>Home</motion.li>
                     </motion.ul>
                     <motion.div whileTap={{ scale: 0.6 }} className=' relative flex items-center justify-center'>
+                    <Link to={'/cart'}>
                         <MdShoppingBasket className='text-textColor text-2xl cursor-pointer hover:text-cartNumBg transition-all ease-in-out' />
                         <div className='w-4 h-4 bg-cartNumBg flex items-center justify-center rounded-full absolute -right-[6.5px] -top-2'>
                             <p className='text-xs text-white font-semibold'>2</p>
-                        </div>
+                        </div></Link>
                     </motion.div>
                     <div className='relative'>
                         <motion.img whileTap={{ scale: 0.6 }} src={user ? user.photoURL : Avatar} alt="userprofile" className='w-8 min-w-[40px] h-8 min-h-[40px] drop-shadow-xl cursor-pointer rounded-full' onClick={login} />
