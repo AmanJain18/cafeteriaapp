@@ -7,9 +7,7 @@ import { actionType } from "../context/reducer";
 
 const RowContainer = ({ flag, data, scrollValue }) => {
   const rowContainer = useRef();
-
   const [items, setItems] = useState([]);
-
   const [{ cartItems }, dispatch] = useStateValue();
 
   const addtocart = () => {
@@ -80,7 +78,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
         ))
       ) : (
         <div className="w-full flex flex-col items-center justify-center">
-          <img src={NotFound} className="h-340" />
+          <img src={NotFound} className="h-340"/>
           <p className="text-xl text-headingColor font-semibold my-2">
             Items Not Available
           </p>

@@ -15,7 +15,7 @@ const Header = () => {
     const firebaseAuth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    const [{ user }, dispatch] = useStateValue();
+    const [{ user, cartShow, cartItems}, dispatch] = useStateValue();
 
     const [isMenu, setIsMenu] = useState(false);
     const login = async () => {
@@ -43,12 +43,12 @@ const Header = () => {
         });
     };
 
-    // const showCart = () => {
-    //     dispatch({
-    //         type: actionType.SET_CART_SHOW,
-    //         cartShow: !cartShow,
-    //     });
-    // };
+    const showCart = () => {
+        dispatch({
+            type: actionType.SET_CART_SHOW,
+            cartShow: !cartShow,
+        });
+    };
 
     return (
         <header className='fixed z-50 w-screen p-3 px-4 md:p-6 md:px-16 bg-primary'>
@@ -65,19 +65,25 @@ const Header = () => {
                         exit={{ opacity: 0, x: 200 }}
                         className="flex items-center gap-8">
                         < motion.li whileTap={{ scale: 1.2 }} className='text-base text-textColor hover:text-blue-700  duration-100 cursor-pointer transition-all ease-in-out'>
-                            <Link to={'/createItem'}>
+                            <Link to={'/menus'}>
                                 Menu</Link >
                         </motion.li>
                         <motion.li whileTap={{ scale: 1.2 }} className='text-base text-textColor hover:text-blue-700  duration-100 cursor-pointer transition-all ease-in-out'>About Us</motion.li>
                         <motion.li whileTap={{ scale: 1.2 }} className='text-base text-textColor hover:text-blue-700 duration-100 cursor-pointer transition-all ease-in-out'>Contact</motion.li>
-                        <motion.li whileTap={{ scale: 1.2 }} className='text-bas text-textColor hover:text-blue-700  duration-100 cursor-pointer transition-all ease-in-out'>Home</motion.li>
+                        <motion.li whileTap={{ scale: 1.2 }} className='text-bas text-textColor hover:text-blue-700  duration-100 cursor-pointer transition-all ease-in-out'>
+                            <Link to={'/'}>Home</Link>
+                        </motion.li>
                     </motion.ul>
-                    <motion.div whileTap={{ scale: 0.6 }} className=' relative flex items-center justify-center'>
-                        <MdShoppingBasket className='text-textColor text-2xl cursor-pointer hover:text-cartNumBg transition-all ease-in-out' />
-                        <div className='w-4 h-4 bg-cartNumBg flex items-center justify-center rounded-full absolute -right-[6.5px] -top-2'>
-                            <p className='text-xs text-white font-semibold'>2</p>
+                    <div whileTap={{ scale: 0.6 }} className=' relative flex items-center justify-center' onClick={showCart}>
+                        <MdShoppingBasket className='text-textColor text-2xl cursor-pointer' />
+                        {cartItems && cartItems.length > 0 && (
+                            <div className=" absolute -top-2 -right-2 w-5 h-5 rounded-full bg-cartNumBg flex items-center justify-center">
+                                <p className="text-xs text-white font-semibold">
+                                    {cartItems.length}
+                                </p>
+                            </div>
+                        )}
                         </div>
-                    </motion.div>
                     <div className='relative'>
                         <motion.img whileTap={{ scale: 0.6 }} src={user ? user.photoURL : Avatar} alt="userprofile" className='w-8 min-w-[40px] h-8 min-h-[40px] drop-shadow-xl cursor-pointer rounded-full' onClick={login} />
                         {
@@ -107,16 +113,16 @@ const Header = () => {
             <div className="flex items-center justify-between md:hidden w-full h-full ">
                 <div
                     className="relative flex items-center justify-center"
-                // onClick={showCart}
+                onClick={showCart}
                 >
                     <MdShoppingBasket className="text-textColor text-2xl  cursor-pointer" />
-                    {/* {cartItems && cartItems.length > 0 && (
+                    {cartItems && cartItems.length > 0 && (
                         <div className=" absolute -top-2 -right-2 w-5 h-5 rounded-full bg-cartNumBg flex items-center justify-center">
                             <p className="text-xs text-white font-semibold">
                                 {cartItems.length}
                             </p>
                         </div>
-                    )} */}
+                    )}
                 </div>
 
                 <Link to={"/"} className="flex items-center gap-2">
