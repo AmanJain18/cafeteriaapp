@@ -33,7 +33,7 @@ export default function SignUp () {
     //handle Signup API Integration here
     const createAccount = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/register', {
+            const response = await axios.post('http://localhost:8080/api/v1/register', {
                 name: signupState.name,
                 email: signupState.email,
                 password: signupState.password,
